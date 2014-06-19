@@ -19,6 +19,9 @@ public class AirState : RunnerState
     }
     public override void Update(Player player)
     {
-        
+        if(player.IsGrounded && player.rigidbody2D.velocity.y <= 0)
+        {
+            player.changeState(RunnerState.running);
+        }
     }
 }

@@ -19,6 +19,9 @@ public class RunState : RunnerState
     }
     public override void Update(Player player)
     {
-
+        if(!player.IsGrounded)
+        {
+            player.changeState(RunnerState.airborne);
+        }
     }
 }

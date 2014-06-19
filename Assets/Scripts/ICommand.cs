@@ -19,7 +19,6 @@ class JumpCommand : ICommand
     void jump()
     {
         Debug.Log("Jumping");
-        //change to air state
         player.changeState(RunnerState.airborne);
         Vector2 v = player.rigidbody2D.velocity;
         v.y = jumpSpeed;
@@ -39,7 +38,6 @@ class DashCommand : ICommand
     void dash()
     {
         Debug.Log("Dashing");
-        //change to dash state
     }
     void dashRelease()
     {
@@ -57,7 +55,6 @@ class RightMoveCommand : ICommand
     void rightMove()
     {
         player.MovingRight = true;
-        //change to run state
     }
     void rightMoveRelease()
     {
@@ -76,7 +73,6 @@ class LeftMoveCommand : ICommand
     void leftMove()
     {
         player.MovingLeft = true;
-        //change to run state
     }
     void leftMoveRelease()
     {
@@ -91,7 +87,6 @@ class SlideCommand : ICommand
 
     void slide()
     {
-        //change to slide state
         Debug.Log("slide");
     }
     void slideRelease()

@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
-
-    //InputHandler inputHandler;
+public class Player : MonoBehaviour
+{
     static Player instance = null;
 
     [SerializeField] KeyCode jumpKey;
@@ -12,8 +11,7 @@ public class Player : MonoBehaviour {
     [SerializeField] KeyCode beamKey;
     [SerializeField] KeyCode rightKey;
     [SerializeField] KeyCode slideKey;
-    
-    
+        
     [SerializeField] float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField] float jumpSpeed;
@@ -22,17 +20,18 @@ public class Player : MonoBehaviour {
     [SerializeField] LayerMask whatIsGround;
     float groundRadius = .02f;
 
-    public bool MovingRight;
-    public bool MovingLeft;
+    [HideInInspector] public bool MovingRight;
+    [HideInInspector] public bool MovingLeft;
     bool grounded = false;
+    public bool IsGrounded { get { return grounded; } }
     bool prevGrounded = false;
 
-    ICommand jumpButton;//jump
-    ICommand dashButton;//dash
-    ICommand slideButton;//slide
-    ICommand beamButton;//charge and shoot
-    ICommand rightButton;//right
-    ICommand leftButton;//left
+    ICommand jumpButton;
+    ICommand dashButton;
+    ICommand slideButton;
+    ICommand beamButton;
+    ICommand rightButton;
+    ICommand leftButton;
 
     RunnerState myState;
 
@@ -55,11 +54,7 @@ public class Player : MonoBehaviour {
         MovingLeft = false;
         MovingRight = false;
         bindKeys();
-        //myState = new RunnerState();
         myState = RunnerState.running;
-
-
-       //inputHandler = new InputHandler();
 	}
 
     public void changeState(RunnerState state)
@@ -166,14 +161,6 @@ public class Player : MonoBehaviour {
         UpdateMovement();
         myState.Update(this);
 
-        //Debug.Log(myState);
-        if (!prevGrounded && grounded)
-        {
-            changeState(RunnerState.running);
-            myState = RunnerState.running;
-            prevGrounded = true;
-        }
-        else if (!grounded)
-            prevGrounded = false;
+        Debug.Log(myState);
 	}
 }
