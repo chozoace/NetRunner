@@ -20,7 +20,6 @@ class JumpCommand : ICommand
     {
         if (player.CurrentState != "AirState")
         { 
-            Debug.Log("Jumping");
             player.changeState(RunnerState.airborne);
             Vector2 v = player.rigidbody2D.velocity;
             v.y = jumpSpeed;

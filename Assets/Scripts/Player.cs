@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField] KeyCode beamKey;
     [SerializeField] KeyCode rightKey;
     [SerializeField] KeyCode slideKey;
+    List<KeyCode> keyList = new List<KeyCode>();
+    public List<KeyCode> GetKeyList { get { return keyList; } }
         
     [SerializeField] float moveSpeed;
     [SerializeField] float rightMoveSpeed;
@@ -21,6 +24,8 @@ public class Player : MonoBehaviour
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask whatIsGround;
     float groundRadius = .02f;
+    [SerializeField] int health;
+    public int Health { get { return health; } }
 
     private bool MovingRight;
     public bool IsMoveRight { get { return MovingRight; } set { MovingRight = value; } }
@@ -28,7 +33,6 @@ public class Player : MonoBehaviour
     public bool IsMoveLeft { get { return MovingLeft; } set { MovingLeft = value; } }
     private bool grounded = false;
     public bool IsGrounded { get { return grounded; } }
-    bool prevGrounded = false;
     string currentState;
     public string CurrentState { get { return currentState; } }
 
@@ -40,6 +44,7 @@ public class Player : MonoBehaviour
     ICommand leftButton;
 
     RunnerState myState;
+    RunnerState hitstunState;
 
     public static Player Instance()
     {
@@ -61,6 +66,7 @@ public class Player : MonoBehaviour
         MovingRight = false;
         bindKeys();
         myState = RunnerState.running;
+        hitstunState = RunnerState.noHitstun;
         Vector2 startVelocity = new Vector2(moveSpeed, 0);
         this.rigidbody2D.velocity = startVelocity;
 	}
@@ -72,6 +78,13 @@ public class Player : MonoBehaviour
         myState.enter(this);
     }
 
+    public void changeHitstun(RunnerState state)
+    {
+        hitstunState.exit(this);
+        hitstunState = state;
+        hitstunState.enter(this);
+    }
+
     void bindKeys()
     {
         jumpButton = new JumpCommand();
@@ -79,81 +92,110 @@ public class Player : MonoBehaviour
         rightButton = new RightMoveCommand();
         leftButton = new LeftMoveCommand();
         slideButton = new SlideCommand();
+
+        keyList.Add(jumpKey);
+        keyList.Add(leftKey);
+        keyList.Add(rightKey);
+        keyList.Add(slideKey);
+        keyList.Add(dashKey);
+        keyList.Add(beamKey);
+
+        /*foreach(KeyCode key in keyList)
+        {
+            Debug.Log(key.ToString() + "\n");
+        }*/
     }
 
     void getKeysDown()
     {
-        if(Input.GetKeyDown(jumpKey))
+        /*(KeyCode key in keyList)
         {
-            jumpButton.Execute();
-        }
-        else if(Input.GetKeyDown(dashKey))
+            if(Input.GetKeyDown(key))
+            {
+                myState.handleInput(this, key);
+                hitstunState.handleInput(this, key);
+            }
+        }*/
+        if (hitstunState.StateName != "HitstunState")
         {
-            dashButton.Execute();
-        }
-        else if(Input.GetKeyDown(rightKey))
-        {
-            rightButton.Execute();
-        }
-        else if(Input.GetKeyDown(leftKey))
-        {
-            leftButton.Execute();
-        }
-        else if(Input.GetKeyDown(slideKey))
-        {
-            slideButton.Execute();
+            if (Input.GetKeyDown(jumpKey))
+            {
+                jumpButton.Execute();
+            }
+            else if (Input.GetKeyDown(dashKey))
+            {
+                dashButton.Execute();
+            }
+            else if (Input.GetKeyDown(rightKey))
+            {
+                rightButton.Execute();
+            }
+            else if (Input.GetKeyDown(leftKey))
+            {
+                leftButton.Execute();
+            }
+            else if (Input.GetKeyDown(slideKey))
+            {
+                slideButton.Execute();
+            }
         }
     }
 
     void getKeysUp()
     {
-        if(Input.GetKeyUp(jumpKey))
+        if (hitstunState.StateName != "HitstunState")
         {
-            jumpButton.ExecuteRelease();
-        }
-        else if(Input.GetKeyUp(dashKey))
-        {
-            dashButton.ExecuteRelease();
-        }
-        else if (Input.GetKeyUp(rightKey))
-        {
-            rightButton.ExecuteRelease();
-        }
-        else if(Input.GetKeyUp(leftKey))
-        {
-            leftButton.ExecuteRelease();
-        }
-        else if(Input.GetKeyUp(slideKey))
-        {
-            slideButton.ExecuteRelease();
+            if (Input.GetKeyUp(jumpKey))
+            {
+                jumpButton.ExecuteRelease();
+            }
+            else if (Input.GetKeyUp(dashKey))
+            {
+                dashButton.ExecuteRelease();
+            }
+            else if (Input.GetKeyUp(rightKey))
+            {
+                rightButton.ExecuteRelease();
+            }
+            else if (Input.GetKeyUp(leftKey))
+            {
+                leftButton.ExecuteRelease();
+            }
+            else if (Input.GetKeyUp(slideKey))
+            {
+                slideButton.ExecuteRelease();
+            }
         }
     }
 
     void UpdateMovement()
     {
-        if(MovingRight && MovingLeft)
+        if (hitstunState.StateName != "HitstunState")
         {
-            Vector2 v = rigidbody2D.velocity;
-            v.x = moveSpeed;
-            rigidbody2D.velocity = v;
-        }
-        else if(MovingLeft && !MovingRight)
-        {
-            Vector2 v = rigidbody2D.velocity;
-            v.x = leftMoveSpeed;
-            rigidbody2D.velocity = v;
-        }
-        else if(MovingRight && !MovingLeft)
-        {
-            Vector2 v = rigidbody2D.velocity;
-            v.x = rightMoveSpeed;
-            rigidbody2D.velocity = v;
-        }
-        else if(!MovingLeft && !MovingRight)
-        {
-            Vector2 v = rigidbody2D.velocity;
-            v.x = moveSpeed;
-            rigidbody2D.velocity = v;
+            if (MovingRight && MovingLeft)
+            {
+                Vector2 v = rigidbody2D.velocity;
+                v.x = moveSpeed;
+                rigidbody2D.velocity = v;
+            }
+            else if (MovingLeft && !MovingRight)
+            {
+                Vector2 v = rigidbody2D.velocity;
+                v.x = leftMoveSpeed;
+                rigidbody2D.velocity = v;
+            }
+            else if (MovingRight && !MovingLeft)
+            {
+                Vector2 v = rigidbody2D.velocity;
+                v.x = rightMoveSpeed;
+                rigidbody2D.velocity = v;
+            }
+            else if (!MovingLeft && !MovingRight)
+            {
+                Vector2 v = rigidbody2D.velocity;
+                v.x = moveSpeed;
+                rigidbody2D.velocity = v;
+            }
         }
     }
 
@@ -161,15 +203,25 @@ public class Player : MonoBehaviour
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
     }
+
+    public void takeDamage(int damage)
+    {
+        if (hitstunState.StateName != "HitstunState")
+        {
+            health -= damage;
+            changeHitstun(RunnerState.hitstunned);
+        }
+    }
 	
 	void Update ()
     {
         getKeysDown();
         getKeysUp();
         UpdateMovement();
-        myState.Update(this);
+        myState.UpdateState(this);
+        hitstunState.UpdateState(this);
         currentState = myState.StateName;
 
-        Debug.Log(myState);
+        //Debug.Log(myState);
 	}
 }

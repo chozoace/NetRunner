@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RunState : RunnerState
+public class NoHitstun : RunnerState
 {
-    public override string StateName { get { return "RunState"; } }
+    public override string StateName { get { return "NoHitstun"; } }
 
     public override void enter(Player player)
     {
-        //Debug.Log("start running anim");
+        
     }
     public override void exit(Player player)
     {
-        //Debug.Log("end running anim");
+        
     }
     public override void handleInput(Player player, KeyCode input)
     {
@@ -19,9 +19,6 @@ public class RunState : RunnerState
     }
     public override void UpdateState(Player player)
     {
-        if(!player.IsGrounded)
-        {
-            player.changeState(RunnerState.airborne);
-        }
+        
     }
 }

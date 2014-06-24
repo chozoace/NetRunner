@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
 	void Start ()
     {
         player = Player.Instance();
-        //moveSpeed = player.MoveSpeed;
-        moveVel = new Vector3(7, 0, 0);
+        moveSpeed = player.MoveSpeed;
+        moveVel = new Vector3(moveSpeed, 0, 0);
         this.rigidbody2D.velocity = moveVel;
 	}
 

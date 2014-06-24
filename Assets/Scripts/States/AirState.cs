@@ -7,17 +7,17 @@ public class AirState : RunnerState
 
     public override void enter(Player player)
     {
-        Debug.Log("Change to Air Anim");
+        //Debug.Log("Change to Air Anim");
     }
     public override void exit(Player player)
     {
-        Debug.Log("End air anim");
+        //Debug.Log("End air anim");
     }
     public override void handleInput(Player player, KeyCode input)
     {
         
     }
-    public override void Update(Player player)
+    public override void UpdateState(Player player)
     {
         if(player.IsGrounded && player.rigidbody2D.velocity.y <= 0)
         {
