@@ -11,18 +11,21 @@ public class ICommand
 class JumpCommand : ICommand
 {
     public override void Execute() { jump(); }
-    public override void ExecuteRelease() { }
+    public override void ExecuteRelease() { jumpRelease(); }
 
     Player player = Player.Instance();
     float jumpSpeed = Player.Instance().JumpSpeed;
 
     void jump()
     {
-        Debug.Log("Jumping");
-        player.changeState(RunnerState.airborne);
-        Vector2 v = player.rigidbody2D.velocity;
-        v.y = jumpSpeed;
-        player.rigidbody2D.velocity = v;
+        if (player.CurrentState != "AirState")
+        { 
+            Debug.Log("Jumping");
+            player.changeState(RunnerState.airborne);
+            Vector2 v = player.rigidbody2D.velocity;
+            v.y = jumpSpeed;
+            player.rigidbody2D.velocity = v;
+        }
     }
     void jumpRelease()
     {
@@ -54,12 +57,11 @@ class RightMoveCommand : ICommand
 
     void rightMove()
     {
-        player.MovingRight = true;
+        player.IsMoveRight = true;
     }
     void rightMoveRelease()
     {
-        Debug.Log("released");
-        player.MovingRight = false;
+        player.IsMoveRight = false;
     }
 }
 
@@ -72,11 +74,11 @@ class LeftMoveCommand : ICommand
 
     void leftMove()
     {
-        player.MovingLeft = true;
+        player.IsMoveLeft = true;
     }
     void leftMoveRelease()
     {
-        player.MovingLeft = false;
+        player.IsMoveLeft = false;
     }
 }
 

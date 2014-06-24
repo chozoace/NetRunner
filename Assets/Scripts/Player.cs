@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     [SerializeField] KeyCode slideKey;
         
     [SerializeField] float moveSpeed;
+    [SerializeField] float rightMoveSpeed;
+    [SerializeField] float leftMoveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField] float jumpSpeed;
     public float JumpSpeed { get { return jumpSpeed; } }
@@ -20,11 +22,15 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask whatIsGround;
     float groundRadius = .02f;
 
-    [HideInInspector] public bool MovingRight;
-    [HideInInspector] public bool MovingLeft;
-    bool grounded = false;
+    private bool MovingRight;
+    public bool IsMoveRight { get { return MovingRight; } set { MovingRight = value; } }
+    private bool MovingLeft;
+    public bool IsMoveLeft { get { return MovingLeft; } set { MovingLeft = value; } }
+    private bool grounded = false;
     public bool IsGrounded { get { return grounded; } }
     bool prevGrounded = false;
+    string currentState;
+    public string CurrentState { get { return currentState; } }
 
     ICommand jumpButton;
     ICommand dashButton;
@@ -55,6 +61,8 @@ public class Player : MonoBehaviour
         MovingRight = false;
         bindKeys();
         myState = RunnerState.running;
+        Vector2 startVelocity = new Vector2(moveSpeed, 0);
+        this.rigidbody2D.velocity = startVelocity;
 	}
 
     public void changeState(RunnerState state)
@@ -126,25 +134,25 @@ public class Player : MonoBehaviour
         if(MovingRight && MovingLeft)
         {
             Vector2 v = rigidbody2D.velocity;
-            v.x = 0;
+            v.x = moveSpeed;
             rigidbody2D.velocity = v;
         }
         else if(MovingLeft && !MovingRight)
         {
             Vector2 v = rigidbody2D.velocity;
-            v.x = -MoveSpeed;
+            v.x = leftMoveSpeed;
             rigidbody2D.velocity = v;
         }
         else if(MovingRight && !MovingLeft)
         {
             Vector2 v = rigidbody2D.velocity;
-            v.x = MoveSpeed;
+            v.x = rightMoveSpeed;
             rigidbody2D.velocity = v;
         }
         else if(!MovingLeft && !MovingRight)
         {
             Vector2 v = rigidbody2D.velocity;
-            v.x = 0;
+            v.x = moveSpeed;
             rigidbody2D.velocity = v;
         }
     }
@@ -160,6 +168,7 @@ public class Player : MonoBehaviour
         getKeysUp();
         UpdateMovement();
         myState.Update(this);
+        currentState = myState.StateName;
 
         Debug.Log(myState);
 	}
