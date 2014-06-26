@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Timers;
 
 public class HitstunState : RunnerState
 {
     public override string StateName { get { return "HitstunState"; } }
-    float hitstunDuration = 2f;
+    double hitstunDuration = 1000;
     Player thePlayer;
     Vector2 v;
+    Timer hitstunTimer = new Timer();
 
     public override void enter(Player player)
     {
@@ -14,18 +16,22 @@ public class HitstunState : RunnerState
         v = new Vector2(4, player.rigidbody2D.velocity.y);
         player.rigidbody2D.velocity = v;
         thePlayer = player;
-        Invoke("endHitstun", 2f); //what the fuck do you mean null???
+        hitstunTimer.Interval = hitstunDuration;
+        hitstunTimer.Elapsed += new ElapsedEventHandler(endHitstun);
+        hitstunTimer.Enabled = true;
     }
 
-    void endHitstun()
+    void endHitstun(object sender, ElapsedEventArgs e)
     {
         Debug.Log("ending");
         thePlayer.changeHitstun(RunnerState.noHitstun);
+        hitstunTimer.Stop();
     }
 
     public override void exit(Player player)
     {
         //end hitstun
+        player.resetInputs();
     }
     public override void handleInput(Player player, KeyCode input)
     {

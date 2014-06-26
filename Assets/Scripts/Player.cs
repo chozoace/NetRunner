@@ -199,6 +199,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void resetInputs()
+    {
+        MovingLeft = false;
+        MovingRight = false;
+    }
+
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
