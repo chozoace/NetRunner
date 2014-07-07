@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] float rightMoveSpeed;
     [SerializeField] float leftMoveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
+    public Vector2 CurrentSpeed { get { return this.rigidbody2D.velocity; } }
     [SerializeField] float jumpSpeed;
     public float JumpSpeed { get { return jumpSpeed; } }
     [SerializeField] Transform groundCheck;
@@ -65,10 +66,10 @@ public class Player : MonoBehaviour
         MovingLeft = false;
         MovingRight = false;
         bindKeys();
-        myState = RunnerState.running;
+        myState = RunnerState.idle;
         hitstunState = RunnerState.noHitstun;
-        Vector2 startVelocity = new Vector2(moveSpeed, 0);
-        this.rigidbody2D.velocity = startVelocity;
+        //Vector2 startVelocity = new Vector2(moveSpeed, 0);
+        //this.rigidbody2D.velocity = startVelocity;
 	}
 
     public void changeState(RunnerState state)
@@ -174,26 +175,30 @@ public class Player : MonoBehaviour
         {
             if (MovingRight && MovingLeft)
             {
+                //idle make speed 0
                 Vector2 v = rigidbody2D.velocity;
-                v.x = moveSpeed;
+                v.x = 0;
                 rigidbody2D.velocity = v;
             }
             else if (MovingLeft && !MovingRight)
             {
+                //move left
                 Vector2 v = rigidbody2D.velocity;
-                v.x = leftMoveSpeed;
+                v.x = -moveSpeed;
                 rigidbody2D.velocity = v;
             }
             else if (MovingRight && !MovingLeft)
             {
+                //move right
                 Vector2 v = rigidbody2D.velocity;
-                v.x = rightMoveSpeed;
+                v.x = moveSpeed;
                 rigidbody2D.velocity = v;
             }
             else if (!MovingLeft && !MovingRight)
             {
+                //idle make speed 0
                 Vector2 v = rigidbody2D.velocity;
-                v.x = moveSpeed;
+                v.x = 0;
                 rigidbody2D.velocity = v;
             }
         }
@@ -228,6 +233,6 @@ public class Player : MonoBehaviour
         hitstunState.UpdateState(this);
         currentState = myState.StateName;
 
-        //Debug.Log(myState);
+        Debug.Log(myState.StateName);
 	}
 }

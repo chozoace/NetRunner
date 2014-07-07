@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\States\AirState.cs" />
      <Compile Include="Assets\Scripts\States\DashState.cs" />
      <Compile Include="Assets\Scripts\States\HitstunState.cs" />
+     <Compile Include="Assets\Scripts\States\IdleState.cs" />
      <Compile Include="Assets\Scripts\States\NoHitstun.cs" />
      <Compile Include="Assets\Scripts\States\RunState.cs" />
      <Compile Include="Assets\Scripts\States\RunnerState.cs" />

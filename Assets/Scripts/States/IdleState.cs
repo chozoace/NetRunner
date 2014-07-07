@@ -1,30 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AirState : RunnerState
+public class IdleState : RunnerState
 {
-    public override string StateName { get { return "AirState"; } }
+    public override string StateName { get { return "IdleState"; } }
 
     public override void enter(Player player)
     {
-        //Debug.Log("Change to Air Anim");
+        Debug.Log("start Idle anim");
     }
     public override void exit(Player player)
     {
-        //Debug.Log("End air anim");
+        Debug.Log("end Idle anim");
     }
     public override void handleInput(Player player, KeyCode input)
     {
-        
+
     }
     public override void UpdateState(Player player)
     {
-        if(player.IsGrounded && player.rigidbody2D.velocity.y <= 0)
+        if (!player.IsGrounded)
+        {
+            player.changeState(RunnerState.airborne);
+        }
+        else
         {
             if (player.CurrentSpeed.x != 0)
+            {
                 player.changeState(RunnerState.running);
-            else
-                player.changeState(RunnerState.idle);
+            }
         }
     }
+	
 }

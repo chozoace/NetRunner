@@ -7,11 +7,11 @@ public class RunState : RunnerState
 
     public override void enter(Player player)
     {
-        //Debug.Log("start running anim");
+        Debug.Log("start running anim");
     }
     public override void exit(Player player)
     {
-        //Debug.Log("end running anim");
+        Debug.Log("end running anim");
     }
     public override void handleInput(Player player, KeyCode input)
     {
@@ -22,6 +22,13 @@ public class RunState : RunnerState
         if(!player.IsGrounded)
         {
             player.changeState(RunnerState.airborne);
+        }
+        else
+        {
+            if(player.CurrentSpeed.x == 0)
+            {
+                player.changeState(RunnerState.idle);
+            }
         }
     }
 }

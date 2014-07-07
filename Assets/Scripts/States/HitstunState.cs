@@ -13,8 +13,9 @@ public class HitstunState : RunnerState
     public override void enter(Player player)
     {
         //start hitstun
-        v = new Vector2(4, player.rigidbody2D.velocity.y);
-        player.rigidbody2D.velocity = v;
+        //v = new Vector2(4, player.rigidbody2D.velocity.y);
+        //player.rigidbody2D.velocity = v;
+
         thePlayer = player;
         hitstunTimer.Interval = hitstunDuration;
         hitstunTimer.Elapsed += new ElapsedEventHandler(endHitstun);
